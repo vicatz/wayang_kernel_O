@@ -17,3 +17,10 @@ clean::
 # Fix build for GCC 4.7
 EXTRA_CFLAGS += -Wno-maybe-uninitialized -Wno-unused-function -Wno-switch-unreachable
 
+subdir-ccflags-y += \
+	-Wno-array-bounds \
+	-Wno-empty-body \
+	-Wno-enum-conversion \
+	-Wno-non-literal-null-conversion \
+	-Wno-parentheses-equality \
+	-Wno-typedef-redefinition
