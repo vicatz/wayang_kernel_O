@@ -34,6 +34,9 @@
 #include <linux/log2.h>
 #include <linux/cma.h>
 #include <linux/highmem.h>
+#include <linux/delay.h>
+#include <linux/kmemleak.h>
+#include <trace/events/cma.h>
 #include <linux/io.h>
 
 #include "cma.h"
@@ -69,11 +72,6 @@ static unsigned long cma_bitmap_aligned_offset(const struct cma *cma,
 {
 	return (cma->base_pfn & ((1UL << align_order) - 1))
 		>> cma->order_per_bit;
-}
-
-static unsigned long cma_bitmap_maxno(struct cma *cma)
-{
-	return cma->count >> cma->order_per_bit;
 }
 
 static unsigned long cma_bitmap_pages_to_bits(const struct cma *cma,
@@ -335,6 +333,9 @@ int __init cma_declare_contiguous(phys_addr_t base,
 			}
 		}
 
+		if (addr < highmem_start)
+			kmemleak_no_scan(__va(addr));
+
 		/*
 		 * kmemleak scans/reads tracked objects for pointers to other
 		 * objects but this address isn't mapped and accessible
@@ -484,3 +485,4 @@ bool cma_release(struct cma *cma, const struct page *pages, unsigned int count)
 
 	return true;
 }
+
