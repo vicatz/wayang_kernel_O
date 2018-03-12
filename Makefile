@@ -141,9 +141,14 @@ PHONY += $(MAKECMDGOALS) sub-make
 $(filter-out _all sub-make $(CURDIR)/Makefile, $(MAKECMDGOALS)) _all: sub-make
 	@:
 
-sub-make:
-	$(Q)$(MAKE) -C $(KBUILD_OUTPUT) KBUILD_SRC=$(CURDIR) \
-	-f $(CURDIR)/Makefile $(filter-out _all sub-make,$(MAKECMDGOALS))
+# KBUILD_RELSRC is the relative path from output to source; this was added so
+# that the absolute path to source files wouldn't get encoded in vmlinux and
+# module binaries
+SUB_KBUILD_SRC = $(if $(KBUILD_RELSRC),$(KBUILD_RELSRC),$(CURDIR))
+
+sub-make: FORCE
+	$(Q)$(MAKE) -C $(KBUILD_OUTPUT) KBUILD_SRC=$(SUB_KBUILD_SRC) \
+	-f $(SUB_KBUILD_SRC)/Makefile $(filter-out _all sub-make,$(MAKECMDGOALS))
 
 # Leave processing to above invocation of make
 skip-makefile := 1
@@ -368,10 +373,6 @@ DEPMOD		= /sbin/depmod
 PERL		= perl
 PYTHON		= python
 CHECK		= sparse
-
-# Use the wrapper for the compiler.  This wrapper scans for new
-# warnings and causes the build to stop upon encountering them.
-#CC		= $(srctree)/scripts/gcc-wrapper.py $(REAL_CC)
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
@@ -644,13 +645,6 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning,maybe-uninitialized,)
 else
 KBUILD_CFLAGS	+= -O2
 endif
-
-
-# Kill array bound warnings
-KBUILD_CFLAGS	+= $(call cc-disable-warning,array-bounds,)
-
-# Kill misleading indention errors
-KBUILD_CFLAGS   += -Wno-misleading-indentation
 
 # Tell gcc to never replace conditional load with a non-conditional one
 KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
@@ -1039,7 +1033,7 @@ prepare1: prepare2 $(version_h) include/generated/utsrelease.h \
 
 archprepare: archheaders archscripts prepare1 scripts_basic
 
-prepare0: archprepare
+prepare0: archprepare FORCE
 	$(Q)$(MAKE) $(build)=.
 
 # All the preparing..
@@ -1057,7 +1051,8 @@ define filechk_utsrelease.h
 	  echo '"$(KERNELRELEASE)" exceeds $(uts_len) characters' >&2;    \
 	  exit 1;                                                         \
 	fi;                                                               \
-	(echo \#define UTS_RELEASE \"$(KERNELRELEASE)\";)
+	(echo \#define UTS_RELEASE \"$(KERNELRELEASE)\";                  \
+	echo \#define SHORT_UTS_RELEASE \"$(KERNELVERSION)$(CONFIG_LOCALVERSION)\";)
 endef
 
 define filechk_version.h
@@ -1089,7 +1084,7 @@ INSTALL_FW_PATH=$(INSTALL_MOD_PATH)/lib/firmware
 export INSTALL_FW_PATH
 
 PHONY += firmware_install
-firmware_install:
+firmware_install: FORCE
 	@mkdir -p $(objtree)/firmware
 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.fwinst obj=firmware __fw_install
 
@@ -1111,7 +1106,7 @@ PHONY += archscripts
 archscripts:
 
 PHONY += __headers
-__headers: $(version_h) scripts_basic asm-generic archheaders archscripts
+__headers: $(version_h) scripts_basic asm-generic archheaders archscripts FORCE
 	$(Q)$(MAKE) $(build)=scripts build_unifdef
 
 PHONY += headers_install_all
