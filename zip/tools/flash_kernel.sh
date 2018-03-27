@@ -38,6 +38,20 @@ if [ -f /tmp/ramdisk/init.spectrum.sh ]; then
 rm /tmp/ramdisk/init.spectrum.sh
 fi
 
+# Clear Unsupported stuff in ramdisk
+rm /tmp/ramdisk/extracted/init.fk.rc
+rm /tmp/ramdisk/extracted/init.performance_profiles.rc
+rm /tmp/ramdisk/extracted/init.special_power.sh
+rm /tmp/ramdisk/extracted/init.supolicy.sh
+rm /tmp/ramdisk/extracted/init.kud.rc
+rm /tmp/ramdisk/extracted/init.inferno.rc
+rm /tmp/ramdisk/extracted/init.chewy.rc
+rm /tmp/ramdisk/extracted/init.jembut.rc
+rm /tmp/ramdisk/extracted/init.jembut.rc
+rm /tmp/ramdisk/extracted/init.jembut.rc
+rm /tmp/ramdisk/extracted/init.jembut.rc
+# Clear Unsupported stuff END
+
 # COMPATIBILITY FIXES END
 chmod 0755 /tmp/ramdisk/init.wayang.rc
 if [ $(grep -c "import /init.wayang.rc" /tmp/ramdisk/init.rc) == 0 ]; then
