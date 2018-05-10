@@ -207,7 +207,7 @@
 			#address-cells = <1>;
 			#size-cells = <1>;
 
-			qcom,iterm-ma = <100>;
+			qcom,iterm-ma = <600>;
 			qcom,float-voltage-mv = <4400>;
 			qcom,fastchg-current-ma = <2200>;
 			qcom,resume-delta-mv = <200>;
@@ -324,12 +324,12 @@
 			compatible = "qcom,qpnp-fg";
 			#address-cells = <1>;
 			#size-cells = <1>;
-			qcom,resume-soc = <99>;
+			qcom,resume-soc = <98>;
 			status = "okay";
 			qcom,bcl-lm-threshold-ma = <127>;
 			qcom,bcl-mh-threshold-ma = <405>;
-			qcom,fg-iterm-ma = <150>;
-			qcom,fg-chg-iterm-ma = <100>;
+			qcom,fg-iterm-ma = <600>;
+			qcom,fg-chg-iterm-ma = <600>;
 			qcom,cycle-counter-en;
 			qcom,capacity-learning-on;
 			qcom,fg-cc-cv-threshold-mv = <4380>;
