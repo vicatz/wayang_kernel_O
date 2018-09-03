@@ -17,7 +17,7 @@
  #
 zim=/tmp/Image.gz-dtb
 cmd="androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 androidboot.bootdevice=7824900.sdhci earlycon=msm_hsl_uart,0x78af000"
-cmd=$cmd" androidboot.selinux=permissive"
+#cmd=$cmd""
 cp -f /tmp/cpio /sbin/cpio
 cd /tmp/
 /sbin/busybox dd if=/dev/block/bootdevice/by-name/boot of=./boot.img
@@ -52,6 +52,16 @@ rm /tmp/ramdisk/extracted/init.jembut.rc
 rm /tmp/ramdisk/extracted/init.jembut.rc
 # Clear Unsupported stuff END
 
+# Treble and Nontreble OS detected
+if ([ "`grep "ro.treble.enabled=true" /system/build.prop`" ]); then
+dtb=/tmp/msm8953-qrd-sku3-mido-treble.dtb;
+else
+dtb=/tmp/msm8953-qrd-sku3-mido-nontreble.dtb;
+fi;
+
+# Suck kernel
+cat /tmp/Image.gz $dtb > /tmp/Image.gz-dtb
+
 # COMPATIBILITY FIXES END
 chmod 0755 /tmp/ramdisk/init.wayang.rc
 if [ $(grep -c "import /init.wayang.rc" /tmp/ramdisk/init.rc) == 0 ]; then
@@ -60,5 +70,5 @@ fi
 find . | cpio -o -H newc | gzip > /tmp/boot.img-ramdisk.gz
 rm -r /tmp/ramdisk
 cd /tmp/
-./mkbootimg --kernel $zim --ramdisk /tmp/boot.img-ramdisk.gz --cmdline "$cmd" --base 0x80000000 --pagesize 2048 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 $hash -o /tmp/newboot.img
+./mkbootimg --kernel $zim --ramdisk /tmp/boot.img-ramdisk.gz --cmdline "$cmd" --base 0x80000000 --pagesize 2048 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 -o /tmp/newboot.img
 /sbin/busybox dd if=/tmp/newboot.img of=/dev/block/bootdevice/by-name/boot
