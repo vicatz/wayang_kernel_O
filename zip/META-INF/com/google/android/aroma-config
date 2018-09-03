@@ -1,8 +1,8 @@
 ini_set("rom_name",             "Wayang™");
-ini_set("rom_version",          "v1.4");
+ini_set("rom_version",          "v1.6");
 ini_set("rom_author",           "vicatz@xda");
-ini_set("rom_device",           "Mido_Oreo");
-ini_set("rom_date",             "March 22, 2018");
+ini_set("rom_device",           "Mido_Aosp-Los Based ROMS");
+ini_set("rom_date",             "Sept 4, 2018");
 
 ini_set("force_colorspace","rgba");
 #ini_set("dp","6");
@@ -67,7 +67,7 @@ endif;
 setvar("retstatus",
 install(
   "\nInstalling",
-  "<@center>\nInstalling Wayang Kernel For Oreo\nPlease wait</@>",
+  "<@center>\nInstalling Wayang Kernel For Aosp-Los Based ROMS\nPlease wait</@>",
   "")
 );
 
@@ -83,7 +83,7 @@ checkviewbox(
 	
     "@welcome",
 
-    "Reboot po ora? Lek iyo centangen kuwi :v .",
+    "Reboot po ora?",
 
     "0",
 

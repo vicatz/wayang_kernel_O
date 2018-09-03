@@ -1,6 +1,6 @@
 #!/bin/bash
 kernel_dir=$PWD
-export V="v1.4"
+export V="v1.6"
 export CONFIG_FILE="mido_defconfig"
 export ARCH=arm64
 export SUBARCH=arm64
@@ -14,7 +14,7 @@ export PATH=$PATH:${TOOL_CHAIN_PATH}
 export builddir="${kernel_dir}/mateng"
 #export modules_dir="zip/system/lib/modules"
 export ZIPPER_DIR="${kernel_dir}/zip"
-export ZIP_NAME="wayang™${V}_Oreo-Los_Aosp.zip"
+export ZIP_NAME="wayang™${V}-Los_Aosp.zip"
 export ZIMAGE DIR="arch/arm64/boot"
 export IMAGE="arch/arm64/boot/Image.gz";
 JOBS="-j8"
