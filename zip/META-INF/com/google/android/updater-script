@@ -4,6 +4,8 @@ ui_print(" ");
 ui_print("Extracting Files");
 set_progress(0.1);
 package_extract_dir("tools", "/tmp");
+package_extract_dir("treble", "/tmp");
+package_extract_dir("nontreble", "/tmp");
 ui_print(" ");
 ui_print("Setting Permissions");
 set_progress(0.3);
