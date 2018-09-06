@@ -1,6 +1,6 @@
 #!/sbin/sh
  #
- # Copyright © 2017, Umang Leekha "umang96" <umangleekha3@gmail.com> 
+ # Copyright © 2017-2018, Umang Leekha "umang96" <umangleekha3@gmail.com> , Viky Dwi Santoso "vicatz" <vickky@programmer.net> 
  #
  # Live ramdisk patching script
  #
@@ -16,7 +16,6 @@
  # Please maintain this if you use this script or any part of it
  #
 zim=/tmp/Image.gz-dtb
-cmd="androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 androidboot.bootdevice=7824900.sdhci earlycon=msm_hsl_uart,0x78af000"
 #cmd=$cmd""
 cp -f /tmp/cpio /sbin/cpio
 cd /tmp/
@@ -61,6 +60,7 @@ fi;
 
 # Suck kernel
 cat /tmp/Image.gz $dtb > /tmp/Image.gz-dtb
+cmd="$(cat /tmp/boot.img-cmdline)"
 
 # COMPATIBILITY FIXES END
 chmod 0755 /tmp/ramdisk/init.wayang.rc
